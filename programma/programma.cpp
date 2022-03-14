@@ -1,5 +1,7 @@
 ﻿#include<iostream>
 #include<string>
+#include <fstream>
+#include <windows.h>
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
@@ -12,22 +14,25 @@ struct student
 
 };
 
+const int amountOfS = 6;
+student stud[amountOfS] = {};
+
 void input()
 
 {
-	const int amountOfS = 6;
-	student student[amountOfS] = {};
+	//const int amountOfS = 6;
+	//student stud[amountOfS] = {};
 
 	for (int i = 0; i < amountOfS; i++)
 	{
 		cout << "Фамилия: ";
-		cin.getline(student[i].surname, 32);
+		cin.getline(stud[i].surname, 32);
 		cout << "Школа: ";
-		cin >> student[i].school;
+		cin >> stud[i].school;
 		cout << "Ответы: ";
 		for (int i = 0; i < 5; i++)
 		{
-			cin >> student[i].answer;
+			cin >> stud[i].answer;
 		}
 		cin.get(); // считывает из потока Enter который пользователь нажимает после ввода возраста
 		cout << endl;
@@ -36,16 +41,38 @@ void input()
 		cout << "==================================================================" << endl;
 		for (int i = 0; i < amountOfS; i++)
 		{
-			cout << i + 1 << '\t' << student[i].surname << '\t' << student[i].school
-				<< '\t'; for (int i = 0; i < 5; i++) { cout << student[i].answer<<" "; };
+			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
+				<< '\t'; for (int i = 0; i < 5; i++) { cout << stud[i].answer<<" "; };
 			cout << endl;
 		}
 		
 }
 
-void output()
-{
-	cout << "Privet!";
+void load()
+{	setlocale(LC_ALL,"Russian");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	// создать экземпляр файла filename
+	ifstream inputFile("stud.txt");
+	if (!inputFile)
+	{
+		cout << "Ошибка в открытии файла!!!";
+	};
+
+	char buffer[255]; // буфер для сохранения одной строки
+
+	// цикл чтения строк файла
+	// строки читаются до тех пор, пока не будет достигнут конец файла
+	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
+	cout << "==================================================================" << endl;
+	while (!inputFile.eof())
+	{
+		inputFile.getline(buffer, 255);
+		if (inputFile)
+			cout << buffer << '\t' << endl;
+	}
+
+	inputFile.close();
 }
 void print_menu() {
 	system("cls"); // очищаем экран
@@ -88,7 +115,7 @@ int main()
 			break;
 
 		case 2:
-			output();
+			load();
 
 		case 3:
 			exit(0);
