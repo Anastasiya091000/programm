@@ -1,4 +1,0 @@
-﻿  programma.cpp
-C:\Users\Анастасия\Desktop\пробы\programma\programma.cpp(5,1): warning C4005: _CRT_SECURE_NO_WARNINGS: изменение макроопределения
-C:\Users\Анастасия\Desktop\пробы\programma\programma.cpp : message : см. предыдущее определение "_CRT_SECURE_NO_WARNINGS"
-  programma.vcxproj -> C:\Users\Анастасия\Desktop\пробы\programma\x64\Debug\programma.exe
