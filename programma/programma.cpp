@@ -14,33 +14,44 @@ struct student
 
 };
 
-const int amountOfS = 6;
+const int amountOfS = 3;
 student stud[amountOfS] = {};
+
+int ans[] = { 1,1 };
+int kol;
 
 void sravn()
 {
 	cout << "Список учеников школы №1" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
+	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
 	cout << "==================================================================" << endl;
 
 	for (int i = 0; i < amountOfS; i++)
 	{
+		for (int j = 0; j < 2; j++)
+		{
+			if (stud[i].answer == ans[j])
+			{
+				kol = kol + 1;
+			}
+		}
+
 		if (stud[i].school == 1)
 		{
 
 
 			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
 				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << endl;
+			cout << kol << endl;
 
 
 		}
-
+		
 	}
 	cout << endl << endl;
 
 	cout << "Список учеников школы №2" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
+	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
 	cout << "==================================================================" << endl;
 
 	for (int i = 0; i < amountOfS; i++)
@@ -51,15 +62,23 @@ void sravn()
 
 			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
 				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << endl;
+			cout << kol << endl;
 
+
+		}
+		for (int j = 0; j < 2; j++)
+		{
+			if (stud[i].answer == ans[j])
+			{
+				kol = kol + 1;
+			}
 		}
 
 	}
 	cout << endl << endl;
 
 	cout << "Список учеников школы №3" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
+	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
 	cout << "==================================================================" << endl;
 
 	for (int i = 0; i < amountOfS; i++)
@@ -70,10 +89,17 @@ void sravn()
 
 			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
 				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << endl;
+			cout << kol << endl;
+
 
 		}
-
+		for (int j = 0; j < 2; j++)
+		{
+			if (stud[i].answer == ans[j])
+			{
+				kol = kol + 1;
+			}
+		}
 	}
 }
 
@@ -90,7 +116,7 @@ void input()
 		cout << "Школа: ";
 		cin >> stud[i].school;
 		cout << "Ответы: ";
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			cin >> stud[i].answer;
 		}
@@ -102,7 +128,7 @@ void input()
 		for (int i = 0; i < amountOfS; i++)
 		{
 			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
-				<< '\t'; for (int i = 0; i < 5; i++) { cout << stud[i].answer<<" "; };
+				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer<<" "; };
 			cout << endl;
 		}
 		
