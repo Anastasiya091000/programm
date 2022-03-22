@@ -1,1 +1,4 @@
 programma/x64/*
+programma/.vs
+build-*
+programma/CMakeLists.txt.user
