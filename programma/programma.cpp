@@ -5,137 +5,98 @@
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
+const int kol_ocen = 5;
+
+int po[] = { 1,1 };
 
 struct student
 {
 	char surname[64];
 	int school;
-	int answer;
+	int answer[kol_ocen];
+
 
 };
 
-const int amountOfS = 3;
-student stud[amountOfS] = {};
-
-int ans[] = { 1,1 };
-int kol;
-
-void sravn()
+void input(student* stud, int n)
 {
-	cout << "Список учеников школы №1" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
-	cout << "==================================================================" << endl;
-
-	for (int i = 0; i < amountOfS; i++)
-	{
-		for (int j = 0; j < 2; j++)
-		{
-			if (stud[i].answer == ans[j])
-			{
-				kol = kol + 1;
-			}
-		}
-
-		if (stud[i].school == 1)
-		{
-
-
-			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
-				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << kol << endl;
-
-
-		}
-		
-	}
-	cout << endl << endl;
-
-	cout << "Список учеников школы №2" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
-	cout << "==================================================================" << endl;
-
-	for (int i = 0; i < amountOfS; i++)
-	{
-		if (stud[i].school == 2)
-		{
-
-
-			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
-				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << kol << endl;
-
-
-		}
-		for (int j = 0; j < 2; j++)
-		{
-			if (stud[i].answer == ans[j])
-			{
-				kol = kol + 1;
-			}
-		}
-
-	}
-	cout << endl << endl;
-
-	cout << "Список учеников школы №3" << endl << endl;
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << "Количество правильных ответов" << endl;
-	cout << "==================================================================" << endl;
-
-	for (int i = 0; i < amountOfS; i++)
-	{
-		if (stud[i].school == 3)
-		{
-
-
-			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
-				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer << " "; };
-			cout << kol << endl;
-
-
-		}
-		for (int j = 0; j < 2; j++)
-		{
-			if (stud[i].answer == ans[j])
-			{
-				kol = kol + 1;
-			}
-		}
-	}
-}
-
-void input()
-
-{
-	//const int amountOfS = 6;
-	//student stud[amountOfS] = {};
-
-	for (int i = 0; i < amountOfS; i++)
+	for (int i = 0; i < n; i++)
 	{
 		cout << "Фамилия: ";
-		cin.getline(stud[i].surname, 32);
+		cin >> stud[i].surname;
 		cout << "Школа: ";
 		cin >> stud[i].school;
 		cout << "Ответы: ";
-		for (int i = 0; i < 2; i++)
+		for (int j = 0; j < kol_ocen; j++)
 		{
-			cin >> stud[i].answer;
+			cin >> stud[i].answer[j];
 		}
 		cin.get(); // считывает из потока Enter который пользователь нажимает после ввода возраста
 		cout << endl;
-	}
-		cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
-		cout << "==================================================================" << endl;
-		for (int i = 0; i < amountOfS; i++)
+	};
+}
+
+void showData(student* stud, int n)
+{
+	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
+	cout << "==================================================================" << endl;
+	for (int i = 0; i < n; i++)
+	{
+		cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school << '\t';
+		for (int j = 0; j < kol_ocen; j++)
 		{
-			cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school
-				<< '\t'; for (int i = 0; i < 2; i++) { cout << stud[i].answer<<" "; };
-			cout << endl;
+			cout << stud[i].answer[j] << " ";
 		}
-		
+		cout << endl;
+	}
+};
+
+int prav(student* stud, int n)
+{
+	int kol;
+
+	for (int i = 0; i < n; i++)
+	{
+		kol = 0;
+
+		for (int j = 0; j < kol_ocen; j++)
+		{
+			if (stud[i].answer[j] == po[j])
+			{
+				kol = kol + 1;
+			}
+
+		}
+
+
+	}
+	return kol;
+}
+
+void sort(student* stud[], int n)
+
+{
+	student *tmp;
+
+	for (int i = n - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < i; j++)
+		{
+			// сравниваем элементы массива структур по сумме баллов студента
+			if (prav(stud[j]) > prav(stud[j + 1]))
+			{
+				tmp = stud[j];
+				stud[j] = stud[j + 1];
+				stud[j + 1] = tmp;
+			}
+		}
+	}
+
 }
 
 void load()
-{	setlocale(LC_ALL,"Russian");
+{	
+	setlocale(LC_ALL,"Russian");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	// создать экземпляр файла filename
@@ -186,7 +147,14 @@ int get_variant(int count) {
 
 int main()
 {
-	setlocale(LC_ALL, "RUSSIAN");
+	setlocale(LC_CTYPE, "rus");
+	int n;
+
+	cout << "Введите количество учеников:";
+	cin >> n;
+
+	student* stud = new student[n];
+
 
 	int variant; // выбранный пункт меню
 
@@ -197,13 +165,19 @@ int main()
 
 		switch (variant) {
 		case 1:
-			input();
-			sravn();
+			input(stud, n);
+
+			showData(stud, n);
+
+			prav(stud, n);
+
 			break;
 
 		case 2:
 			load();
-			sravn();
+			showData(stud, n);
+
+			prav(stud, n);
 				break;
 		case 3:
 			exit(0);
