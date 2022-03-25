@@ -83,7 +83,7 @@ void sort(student* stud[], int n)
 		for (int j = 0; j < i; j++)
 		{
 			// сравниваем элементы массива структур по сумме баллов студента
-			if (prav(stud[j]) > prav(stud[j + 1]))
+			if (prav(stud[j],n) > prav(stud[j + 1], n))
 			{
 				tmp = stud[j];
 				stud[j] = stud[j + 1];
@@ -170,6 +170,8 @@ int main()
 			showData(stud, n);
 
 			prav(stud, n);
+
+			sort(stud[], n);
 
 			break;
 
