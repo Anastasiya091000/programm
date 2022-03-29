@@ -1,193 +1,113 @@
-﻿#include<iostream>
+#include<iostream>
 #include<string>
 #include <fstream>
-#include <windows.h>
+#include <vector>
+#include <sstream>
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
-const int kol_ocen = 5;
-
-int po[] = { 1,1 };
-
 struct student
 {
-	char surname[64];
-	int school;
-	int answer[kol_ocen];
-
-
+    string surname;
+    int school{0};
+    vector<int> answer;
 };
 
-void input(student* stud, int n)
+std::vector<std::string> split(const std::string& str, const std::string& delimiter)
 {
-	for (int i = 0; i < n; i++)
-	{
-		cout << "Фамилия: ";
-		cin >> stud[i].surname;
-		cout << "Школа: ";
-		cin >> stud[i].school;
-		cout << "Ответы: ";
-		for (int j = 0; j < kol_ocen; j++)
-		{
-			cin >> stud[i].answer[j];
-		}
-		cin.get(); // считывает из потока Enter который пользователь нажимает после ввода возраста
-		cout << endl;
-	};
+    std::vector<std::string> strings;
+
+    std::string::size_type pos = 0;
+    std::string::size_type prev = 0;
+    while ((pos = str.find(delimiter, prev)) != std::string::npos)
+    {
+        strings.push_back(str.substr(prev, pos - prev));
+        prev = pos + 1;
+    }
+
+    // To get the last substring (or only, if delimiter is not found)
+    strings.push_back(str.substr(prev));
+
+    return strings;
 }
 
-void showData(student* stud, int n)
-{
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
-	cout << "==================================================================" << endl;
-	for (int i = 0; i < n; i++)
-	{
-		cout << i + 1 << '\t' << stud[i].surname << '\t' << stud[i].school << '\t';
-		for (int j = 0; j < kol_ocen; j++)
-		{
-			cout << stud[i].answer[j] << " ";
-		}
-		cout << endl;
-	}
-};
-
-int prav(student* stud, int n)
-{
-	int kol;
-
-	for (int i = 0; i < n; i++)
-	{
-		kol = 0;
-
-		for (int j = 0; j < kol_ocen; j++)
-		{
-			if (stud[i].answer[j] == po[j])
-			{
-				kol = kol + 1;
-			}
-
-		}
-
-
-	}
-	return kol;
-}
-
-void sort(student* stud[], int n)
-
-{
-	student *tmp;
-
-	for (int i = n - 1; i >= 0; i--)
-	{
-		for (int j = 0; j < i; j++)
-		{
-			// сравниваем элементы массива структур по сумме баллов студента
-			if (prav(stud[j],n) > prav(stud[j + 1], n))
-			{
-				tmp = stud[j];
-				stud[j] = stud[j + 1];
-				stud[j + 1] = tmp;
-			}
-		}
-	}
-
-}
-
-void load()
+vector<student> readFile()
 {	
-	setlocale(LC_ALL,"Russian");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-	// создать экземпляр файла filename
-	ifstream inputFile("stud.txt");
-	if (!inputFile)
-	{
-		cout << "Ошибка в открытии файла!!!";
-	};
+    vector<student> students;
 
-	char buffer[255]; // буфер для сохранения одной строки
+    std::ifstream file("stud.txt");
 
-	// цикл чтения строк файла
-	// строки читаются до тех пор, пока не будет достигнут конец файла
-	cout << "№\t" << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
-	cout << "==================================================================" << endl;
-	while (!inputFile.eof())
-	{
-		inputFile.getline(buffer, 255);
-		if (inputFile)
-			cout << buffer << '\t' << endl;
-	}
+    if ( !file ) {
+        cerr << "Unable to open file" << endl;
+        exit(EXIT_FAILURE);
+    }
 
-	inputFile.close();
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+    vector<string> strings = split(content, "\n");
+
+    for ( int i = 0; i < strings.size(); i++ ) {
+        vector<string> studentData = split(strings[i], " ");
+
+        if ( studentData.size() != 7 )
+            continue;
+
+        student stud;
+        stud.surname = studentData.at(0);
+        stud.school  = atoi(studentData.at(1).c_str());
+
+        for ( int j = 2; j < studentData.size(); j++ )
+            stud.answer.push_back(j);
+
+        students.push_back(stud);
+    }
+
+    return students;
 }
-void print_menu() {
-	system("cls"); // очищаем экран
-	cout << "1. Ввести данные с клавиатуры" << endl;
-	cout << "2. Вывести данные из файла" << endl;
-	cout << "3. Выход" << endl;
-	cout << "Введите номер (1-3):";
-}
 
+void showData(const vector<student>& students)
+{
+    cout << "==================================================================" << endl;
 
-int get_variant(int count) {
-	int variant;
-	string s; // строка для считывания введённых данных
-	getline(cin, s); // считываем строку
+    if ( students.empty() )
+        return;
 
-	// пока ввод некорректен, сообщаем об этом и просим повторить его
-	while (sscanf(s.c_str(), "%d", &variant) != 1 || variant < 1 || variant > count) {
-		cout << "Incorrect input. Try again: "; // выводим сообщение об ошибке
-		getline(cin, s); // считываем строку повторно
-	}
+    cout << "Фамилия\t" << "Школа\t" << "Ответы\t" << endl;
 
-	return variant;
+    for ( int i = 0; i < students.size(); i++ ) {
+
+        student stud = students.at(i);
+
+        cout << stud.surname << "\t" <<  to_string(stud.school) << " \t";
+
+        for ( int j = 0; j < stud.answer.size(); j++ )
+            cout << stud.answer.at(j) << " ";
+
+        cout << endl;
+    }
+};
+
+vector<student> sorting(const vector<student>& students)
+{
+    return vector<student>{};
 }
 
 
 int main()
 {
 	setlocale(LC_CTYPE, "rus");
-	int n;
 
-	cout << "Введите количество учеников:";
-	cin >> n;
+    // read information about students
+    vector<student> students = readFile();
 
-	student* stud = new student[n];
+    // show raw students data from file
+    showData(students);
 
+    // sorting students information
+    vector<student> sortedStudents = sorting(students);
 
-	int variant; // выбранный пункт меню
+    // show sorted students data
+    showData(sortedStudents);
 
-	do {
-		print_menu(); // выводим меню на экран
-
-		variant = get_variant(3); // получаем номер выбранного пункта меню
-
-		switch (variant) {
-		case 1:
-			input(stud, n);
-
-			showData(stud, n);
-
-			prav(stud, n);
-
-			sort(stud[], n);
-
-			break;
-
-		case 2:
-			load();
-			showData(stud, n);
-
-			prav(stud, n);
-				break;
-		case 3:
-			exit(0);
-
-		}
-		system("pause");
-	} 
-
-	while (1);
-	return 0;
+    return EXIT_SUCCESS;
 }
